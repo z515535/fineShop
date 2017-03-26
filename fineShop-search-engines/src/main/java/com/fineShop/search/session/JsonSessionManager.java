@@ -2,10 +2,9 @@ package com.fineShop.search.session;
 
 import java.util.Map;
 
-import javax.annotation.Resource;
-
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
 import com.fineShop.search.mapper.Sentence;
@@ -18,16 +17,20 @@ import com.fineShop.search.mapper.Sentence;
 */
 public class JsonSessionManager implements JsonSession{
 	
-	@Resource(name="client")
 	private Client client;
+	
+	public void setClient(Client client) {
+		this.client = client;
+	}
 	
 	public String search(Sentence sentence, Object param) {
 		
 		Map<String, Object> paramMap = (Map<String, Object>) param;
 		
-		SearchResponse response = client.prepareSearch(sentence.getIndex())
-				.setQuery(QueryBuilders.templateQuery(sentence.getResource(), paramMap)).get();
+	/*	SearchResponse response = client.prepareSearch(sentence.getIndex())
+				.setQuery(QueryBuilders.templateQuery(sentence.getResource(), paramMap)).get();*/
+		SearchResponse response = client.prepareSearch("library").setTypes("user")
+		.setQuery(QueryBuilders.termQuery("id", 1)).get();
 		return response.toString();
 	}
-
 }

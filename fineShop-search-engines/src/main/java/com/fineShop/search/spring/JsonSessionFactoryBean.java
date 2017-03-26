@@ -1,12 +1,8 @@
 package com.fineShop.search.spring;
 
-import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
-
-import com.fineShop.search.mapper.Sentence;
-import com.fineShop.search.session.JsonSession;
 
 /**
 * @author 作者 wugf:
@@ -14,44 +10,37 @@ import com.fineShop.search.session.JsonSession;
 * 类说明
 * 
 */
-public class JsonSessionFactoryBean implements FactoryBean<JsonSession>,InitializingBean,ApplicationListener<ApplicationEvent>{
+public class JsonSessionFactoryBean implements InitializingBean,ApplicationListener<ApplicationEvent>{
 	
 	private static boolean isStart = false;
-	private JsonSession test = new Test();
+	private RegistProxyManager registProxyManager;
+	private String packagePath;
 	
-	public JsonSession getObject() throws Exception {
-		// TODO Auto-generated method stub
-		return test;
-	}
-
-	public Class<? extends JsonSession> getObjectType() {
-		return this.test == null ? Test.class : this.test.getClass();
-	}
-
-	public boolean isSingleton() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 	public void onApplicationEvent(ApplicationEvent event) {
-		// TODO Auto-generated method stub
 		if (!isStart) {
 			isStart = true;
 			System.err.println("spring 启动");
+			//加载配置文件
+			
+			//扫描代理接口并注册代理对象
+			registProxyManager.setPackagePath(packagePath);
+			registProxyManager.registProxy();
 		}
-	}
-
-	public void afterPropertiesSet() throws Exception {
-		// TODO Auto-generated method stub
-		
 	}
 	
-	class Test implements JsonSession{
-
-		public String search(Sentence sentence, Object param) {
-			return "hello";
+	//校验 是否已注入RegistProxyManager
+	public void afterPropertiesSet() throws Exception {
+		if (this.registProxyManager == null) {
+			throw new RuntimeException("搜索框架启动错误，初始化注入RegistProxyManager异常!");
 		}
-		
+			
 	}
 
+	public void setRegistProxyManager(RegistProxyManager registProxyManager) {
+		this.registProxyManager = registProxyManager;
+	}
+
+	public void setPackagePath(String packagePath) {
+		this.packagePath = packagePath;
+	}
 }

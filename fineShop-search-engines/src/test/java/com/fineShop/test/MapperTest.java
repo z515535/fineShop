@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.fineShop.entity.UserDao;
 import com.fineShop.search.session.JsonSession;
 
 /**
@@ -19,10 +20,9 @@ import com.fineShop.search.session.JsonSession;
 @ContextConfiguration("classpath*:/spring/spring-*.xml")
 public class MapperTest {
 	@Resource
-	private JsonSession jsonSession;
-	
+	private UserDao userDao;
 	@Test
 	public void test(){
-		System.out.println(jsonSession.search(null, null));
+		System.out.println(userDao.getName());
 	}
 }

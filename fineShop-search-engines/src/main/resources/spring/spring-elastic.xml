@@ -18,7 +18,22 @@
 	<bean id="elasticsearchTemplate"
 		class="org.springframework.data.elasticsearch.core.ElasticsearchTemplate">
 		<constructor-arg name="client" ref="client" />
+	</bean>
+	
+	<bean id="jsonSession" class="com.fineShop.search.session.JsonSessionManager">
+		<property name="client" ref="client"/>
 	</bean> -->
 	
-	<bean id="jsonSessionFactoryBean" class="com.fineShop.search.spring.JsonSessionFactoryBean"/>
+	<bean id="jsonSession" class="com.fineShop.search.session.JsonSessionManager">
+	</bean>
+	
+	<bean id="registProxyManager" class="com.fineShop.search.spring.RegistProxyManager">
+		<constructor-arg ref="jsonSession"/>
+	</bean>
+	
+	<bean id="JsonSessionFactoryBean" class="com.fineShop.search.spring.JsonSessionFactoryBean">
+		<property name="packagePath" value="com.fineShop.entity"></property>
+		<property name="registProxyManager" ref="registProxyManager"/>
+	</bean>
+	
 </beans>

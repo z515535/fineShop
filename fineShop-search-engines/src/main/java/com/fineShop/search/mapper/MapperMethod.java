@@ -10,8 +10,25 @@ import java.lang.reflect.Method;
 */
 public class MapperMethod {
 	private Method method;
+	private String source;
+	private Object[] params;
 	
-//	public Method getMapperMehtod(){
-//		
-//	}
+	public Method getMethod() {
+		return method;
+	}
+	public void setMethod(Method method) {
+		this.method = method;
+	}
+	public String getSource() {
+		return source;
+	}
+	public void setSource(String source) {
+		this.source = source;
+	}
+	public Object[] getParams() {
+		return params;
+	}
+	public void setParams(Object[] params) {
+		this.params = params;
+	}
 }
