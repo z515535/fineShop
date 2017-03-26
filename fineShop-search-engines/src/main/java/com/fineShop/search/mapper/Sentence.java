@@ -2,28 +2,29 @@ package com.fineShop.search.mapper;
 /**
 * @author 作者 wugf:
 * @version 创建时间：2017年3月23日 下午8:32:49<p>
-* 类说明		语句实体
+* 类说明		配置语句实体
 * 
 */
 public class Sentence {
-	private String resource;
+	private CommandType actionType;
+	private String methodName;
 	private String index = "_all";
 	private String type;
-	private CommandType actionType;
 	private Class<?>[] paramsType;
 	private Class<?> resultType;
+	private String resource;
 	
 	public Sentence(){}
-	
-	public Sentence(String resource, String index, String type, CommandType actionType, Class<?>[] paramsType,
-			Class<?> resultType) {
-		super();
-		this.resource = resource;
+
+	public Sentence(CommandType actionType, String methodName, String index, String type, Class<?>[] paramsType,
+			Class<?> resultType, String resource) {
+		this.actionType = actionType;
+		this.methodName = methodName;
 		this.index = index;
 		this.type = type;
-		this.actionType = actionType;
 		this.paramsType = paramsType;
 		this.resultType = resultType;
+		this.resource = resource;
 	}
 
 	public String getResource() {
@@ -61,5 +62,11 @@ public class Sentence {
 	}
 	public void setResultType(Class<?> resultType) {
 		this.resultType = resultType;
+	}
+	public String getMethodName() {
+		return methodName;
+	}
+	public void setMethodName(String methodName) {
+		this.methodName = methodName;
 	}
 }

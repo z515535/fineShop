@@ -8,7 +8,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.fineShop.entity.UserDao;
-import com.fineShop.search.session.JsonSession;
 
 /**
 * @author 作者 wugf:

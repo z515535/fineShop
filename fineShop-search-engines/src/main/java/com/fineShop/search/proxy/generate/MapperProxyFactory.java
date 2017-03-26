@@ -29,6 +29,7 @@ public class MapperProxyFactory<T> {
 	}
 	
 	public T newInstance(JsonSession jsonSession){
+		// TODO 解析当前代理接口和代理基类的关系,然后传入mapperCache
 		MapperProxy<T> mapperProxy = new MapperProxy<T>(jsonSession, mapperInterface, mapperCache);
 		return newInstance(mapperProxy);
 	}

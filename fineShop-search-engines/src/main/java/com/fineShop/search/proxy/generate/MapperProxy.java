@@ -21,7 +21,6 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {
 	private final Map<Method, MapperMethod> methodCache;
 	
 	public MapperProxy(JsonSession jsonSession, Class<T> mapperInterface, Map<Method, MapperMethod> methodCache) {
-		super();
 		this.jsonSession = jsonSession;
 		this.mapperInterface = mapperInterface;
 		this.methodCache = methodCache;
