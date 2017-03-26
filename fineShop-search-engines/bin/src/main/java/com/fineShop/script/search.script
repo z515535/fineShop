@@ -1,9 +1,0 @@
-{
-	"template" : {
-		"query" : {
-			"match" : {
-				"nickname" : "{{nickname}}"
-			}
-		}
-	}
-}
