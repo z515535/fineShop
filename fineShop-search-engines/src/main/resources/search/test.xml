@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapper namespace="com.fineShop.entity.UserDao" index="library" type="user">
+
+	<select id="getUserById" index="library2" type="user">
+		{
+			"query":{
+				"term":{
+					"id":"{{id}}"
+				}
+			}
+		}
+	</select>
+	
+</mapper>

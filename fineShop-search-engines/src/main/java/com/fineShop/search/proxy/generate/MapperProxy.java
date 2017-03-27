@@ -3,9 +3,12 @@ package com.fineShop.search.proxy.generate;
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.fineShop.search.mapper.MapperMethod;
+import com.fineShop.search.mapper.Sentence;
 import com.fineShop.search.session.JsonSession;
 
 /**
@@ -18,7 +21,8 @@ import com.fineShop.search.session.JsonSession;
 public class MapperProxy<T> implements InvocationHandler, Serializable {
 	private final JsonSession jsonSession;
 	private final Class<T> mapperInterface;
-	private final Map<Method, MapperMethod> methodCache;
+	private final Map<Method, Sentence> sentenceCache = new ConcurrentHashMap<Method, Sentence>();		//代理方法和xml配置映射关系
+	private final Map<Method, MapperMethod> methodCache;	//代理方法和底层具体实现方法映射关系
 	
 	public MapperProxy(JsonSession jsonSession, Class<T> mapperInterface, Map<Method, MapperMethod> methodCache) {
 		this.jsonSession = jsonSession;

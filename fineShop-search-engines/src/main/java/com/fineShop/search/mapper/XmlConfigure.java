@@ -2,6 +2,8 @@ package com.fineShop.search.mapper;
 
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
 * @author 作者 wugf:
 * @version 创建时间：2017年3月26日 下午10:35:11<p>
@@ -24,7 +26,11 @@ public class XmlConfigure {
 		return index;
 	}
 	public void setIndex(String index) {
-		this.index = index;
+		if (StringUtils.isEmpty(index)) {
+			this.index = "_all";
+		} else {
+			this.index = index;
+		}
 	}
 	public String getType() {
 		return type;

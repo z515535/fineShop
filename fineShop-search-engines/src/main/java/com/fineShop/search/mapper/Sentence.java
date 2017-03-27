@@ -6,26 +6,15 @@ package com.fineShop.search.mapper;
 * 
 */
 public class Sentence {
-	private CommandType actionType;
-	private String methodName;
-	private String index = "_all";
-	private String type;
-	private Class<?>[] paramsType;
-	private Class<?> resultType;
-	private String resource;
+	private Integer actionType;			//执行类型
+	private String methodName;				//方法名称
+	private String index;					//索引
+	private String type;					//类型
+//	private Class<?>[] paramsType;			//参数类型
+//	private Class<?> resultType;			//返回类型
+	private String resource;				//执行语句
 	
 	public Sentence(){}
-
-	public Sentence(CommandType actionType, String methodName, String index, String type, Class<?>[] paramsType,
-			Class<?> resultType, String resource) {
-		this.actionType = actionType;
-		this.methodName = methodName;
-		this.index = index;
-		this.type = type;
-		this.paramsType = paramsType;
-		this.resultType = resultType;
-		this.resource = resource;
-	}
 
 	public String getResource() {
 		return resource;
@@ -45,28 +34,30 @@ public class Sentence {
 	public void setType(String type) {
 		this.type = type;
 	}
-	public CommandType getActionType() {
+	public Integer getActionType() {
 		return actionType;
 	}
-	public void setActionType(CommandType actionType) {
+	public void setActionType(Integer actionType) {
 		this.actionType = actionType;
-	}
-	public Class<?>[] getParamsType() {
-		return paramsType;
-	}
-	public void setParamsType(Class<?>[] paramsType) {
-		this.paramsType = paramsType;
-	}
-	public Class<?> getResultType() {
-		return resultType;
-	}
-	public void setResultType(Class<?> resultType) {
-		this.resultType = resultType;
 	}
 	public String getMethodName() {
 		return methodName;
 	}
 	public void setMethodName(String methodName) {
 		this.methodName = methodName;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Sentence other = (Sentence) obj;
+		if (this.methodName.equals(other.getMethodName()))
+			return true;
+		return false;
 	}
 }
