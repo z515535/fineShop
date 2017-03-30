@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.fineShop.search.mapper.MapperMethod;
 import com.fineShop.search.mapper.Sentence;
+import com.fineShop.search.mapper.XmlConfigure;
 import com.fineShop.search.session.JsonSession;
 
 /**
@@ -23,9 +24,11 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {
 	private final Class<T> mapperInterface;
 	private final Map<Method, Sentence> sentenceCache = new ConcurrentHashMap<Method, Sentence>();		//代理方法和xml配置映射关系
 	private final Map<Method, MapperMethod> methodCache;	//代理方法和底层具体实现方法映射关系
+	private final XmlConfigure xmlConfigure;
 	
-	public MapperProxy(JsonSession jsonSession, Class<T> mapperInterface, Map<Method, MapperMethod> methodCache) {
+	public MapperProxy(JsonSession jsonSession, Class<T> mapperInterface,XmlConfigure xmlConfigure, Map<Method, MapperMethod> methodCache) {
 		this.jsonSession = jsonSession;
+		this.xmlConfigure = xmlConfigure;
 		this.mapperInterface = mapperInterface;
 		this.methodCache = methodCache;
 	}

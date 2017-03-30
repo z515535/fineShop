@@ -32,8 +32,9 @@
 	</bean>
 	
 	<bean id="JsonSessionFactoryBean" class="com.fineShop.search.spring.JsonSessionFactoryBean">
-		<property name="packagePath" value="com.fineShop.entity"></property>
+		<property name="packagePath" value="com.fineShop.entity"/>
 		<property name="registProxyManager" ref="registProxyManager"/>
+		<property name="mapperLocations" value="classpath*:/search/*.xml"/>
 	</bean>
 	
 </beans>

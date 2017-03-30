@@ -18,6 +18,7 @@ import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.util.ClassUtils;
 
+import com.fineShop.search.mapper.XmlConfigure;
 import com.fineShop.search.proxy.ScanProxyAdapter;
 import com.fineShop.search.session.JsonSession;
 
@@ -47,7 +48,7 @@ public class ScanGenerateProxyBean implements ScanProxyAdapter {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Set<Map<String, Object>> ScanAndGenerateProxy(String packagePath){
+	public Set<Map<String, Object>> ScanAndGenerateProxy(String packagePath, Set<XmlConfigure> xmlConfiguresSet){
 		Set<Class<?>> clazzs = getClassFile(packagePath);
 		Set<Map<String, Object>> proxys = new HashSet<Map<String, Object>>(clazzs.size());
 		
@@ -55,11 +56,12 @@ public class ScanGenerateProxyBean implements ScanProxyAdapter {
 			for (Class<?> mapperInterface : clazzs) {
 				MapperProxyFactory<?> mapperProxyFactory = proxyFactoryCache.get(mapperInterface);
 				if (mapperProxyFactory == null) {
-					mapperProxyFactory = new MapperProxyFactory(mapperInterface);
+					XmlConfigure xmlConfigure = this.getXmlConf(mapperInterface, xmlConfiguresSet);
+					mapperProxyFactory = new MapperProxyFactory(mapperInterface, xmlConfigure);
 					proxyFactoryCache.put(mapperInterface, mapperProxyFactory);
 				}
 				Map<String, Object> mapperProxy = new HashMap<String, Object>(1);
-				mapperProxy.put(generateAlias(mapperInterface), mapperProxyFactory.newInstance(jsonSession));
+				mapperProxy.put(this.generateAlias(mapperInterface), mapperProxyFactory.newInstance(jsonSession));
 				proxys.add(mapperProxy);
 			}
 		}
@@ -104,6 +106,22 @@ public class ScanGenerateProxyBean implements ScanProxyAdapter {
 		StringBuilder sb = new StringBuilder(clazz.getSimpleName());
 		sb.setCharAt(0, Character.toLowerCase(sb.charAt(0)));
 		return sb.toString();
+	}
+	
+	/**
+	 * 根据接口class获取其配置文件对象
+	 * @param clazz
+	 * @param xmlConfiguresSet
+	 * @return
+	 */
+	private XmlConfigure getXmlConf(Class<?> clazz, Set<XmlConfigure> xmlConfiguresSet){
+		String className = clazz.getName();
+		for (XmlConfigure xmlConfigure : xmlConfiguresSet) {
+			if (className.equals(xmlConfigure.getNamespace())) {
+				return xmlConfigure;
+			}
+		}
+		return null;
 	}
 
 	public Map<Class<?>, MapperProxyFactory<?>> getProxyFactoryCache() {

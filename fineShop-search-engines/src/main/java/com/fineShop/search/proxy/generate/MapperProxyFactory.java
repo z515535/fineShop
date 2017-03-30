@@ -5,6 +5,7 @@ import java.lang.reflect.Proxy;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import com.fineShop.search.mapper.MapperMethod;
+import com.fineShop.search.mapper.XmlConfigure;
 import com.fineShop.search.session.JsonSession;
 
 /**
@@ -16,10 +17,12 @@ import com.fineShop.search.session.JsonSession;
  */
 public class MapperProxyFactory<T> {
 	private final Class<T> mapperInterface;
+	private final XmlConfigure xmlConfigure;
 	private final Map<Method, MapperMethod> mapperCache = new ConcurrentHashMap<Method, MapperMethod>();
-
-	public MapperProxyFactory(Class<T> mapperInterface) {
+	
+	public MapperProxyFactory(Class<T> mapperInterface, XmlConfigure xmlConfigure) {
 		this.mapperInterface = mapperInterface;
+		this.xmlConfigure = xmlConfigure;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -30,7 +33,7 @@ public class MapperProxyFactory<T> {
 	
 	public T newInstance(JsonSession jsonSession){
 		// TODO 解析当前代理接口和代理基类的关系,然后传入mapperCache
-		MapperProxy<T> mapperProxy = new MapperProxy<T>(jsonSession, mapperInterface, mapperCache);
+		MapperProxy<T> mapperProxy = new MapperProxy<T>(jsonSession, mapperInterface, xmlConfigure, mapperCache);
 		return newInstance(mapperProxy);
 	}
 

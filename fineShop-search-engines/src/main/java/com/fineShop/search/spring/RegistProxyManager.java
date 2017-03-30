@@ -8,6 +8,7 @@ import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 
+import com.fineShop.search.mapper.XmlConfigure;
 import com.fineShop.search.proxy.ScanProxyAdapter;
 import com.fineShop.search.proxy.generate.ScanGenerateProxyBean;
 import com.fineShop.search.session.JsonSession;
@@ -39,8 +40,8 @@ public class RegistProxyManager implements BeanFactoryPostProcessor{
 	/**
 	 * 将扫描到的接口根据其生成的别名注册到beanFactory中
 	 */
-	public void registProxy(){
-		Set<Map<String, Object>> proxys = scanProxyAdapter.ScanAndGenerateProxy(packagePath);
+	public void registProxy(Set<XmlConfigure> xmlConfiguresSet){
+		Set<Map<String, Object>> proxys = scanProxyAdapter.ScanAndGenerateProxy(packagePath, xmlConfiguresSet);
 		for (Map<String, Object> proxy : proxys) {
 			for (Map.Entry<String, Object> proxyEntry : proxy.entrySet()) {
 				beanFactory.registerSingleton(proxyEntry.getKey(), proxyEntry.getValue());

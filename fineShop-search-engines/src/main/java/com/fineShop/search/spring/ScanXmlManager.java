@@ -1,4 +1,4 @@
-package com.fineShop.search.mapper;
+package com.fineShop.search.spring;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -15,6 +15,10 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
+import com.fineShop.search.mapper.CommandType;
+import com.fineShop.search.mapper.Constant;
+import com.fineShop.search.mapper.Sentence;
+import com.fineShop.search.mapper.XmlConfigure;
 import com.fineShop.search.mapper.adapter.ScanXmlAdapter;
 /**
 * @author 作者 wugf:

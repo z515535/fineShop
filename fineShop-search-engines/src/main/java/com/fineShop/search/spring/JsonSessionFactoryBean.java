@@ -1,8 +1,13 @@
 package com.fineShop.search.spring;
 
+import java.util.Set;
+
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
+
+import com.fineShop.search.mapper.XmlConfigure;
+import com.fineShop.search.mapper.adapter.ScanXmlAdapter;
 
 /**
 * @author 作者 wugf:
@@ -14,17 +19,20 @@ public class JsonSessionFactoryBean implements InitializingBean,ApplicationListe
 	
 	private static boolean isStart = false;
 	private RegistProxyManager registProxyManager;
+	private ScanXmlAdapter scanXmlAdapter = new ScanXmlManager();
 	private String packagePath;
+	private String mapperLocations;
 	
 	public void onApplicationEvent(ApplicationEvent event) {
 		if (!isStart) {
 			isStart = true;
 			System.err.println("spring 启动");
 			//加载配置文件
+			Set<XmlConfigure> xmlConfigureSet = scanXmlAdapter.scanAndLoadConfig(mapperLocations);
 			
 			//扫描代理接口并注册代理对象
 			registProxyManager.setPackagePath(packagePath);
-			registProxyManager.registProxy();
+			registProxyManager.registProxy(xmlConfigureSet);
 		}
 	}
 	
@@ -43,4 +51,9 @@ public class JsonSessionFactoryBean implements InitializingBean,ApplicationListe
 	public void setPackagePath(String packagePath) {
 		this.packagePath = packagePath;
 	}
+
+	public void setMapperLocations(String mapperLocations) {
+		this.mapperLocations = mapperLocations;
+	}
+	
 }
