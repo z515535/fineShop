@@ -10,8 +10,6 @@ public class Sentence {
 	private String methodName;				//方法名称
 	private String index;					//索引
 	private String type;					//类型
-//	private Class<?>[] paramsType;			//参数类型
-//	private Class<?> resultType;			//返回类型
 	private String resource;				//执行语句
 	
 	public Sentence(){}

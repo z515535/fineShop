@@ -11,8 +11,14 @@ import java.lang.reflect.Method;
  */
 public class MapperMethod {
 	private Method method;
-	private String source;
-	private Object[] params;
+	private Method proxyMethod;
+	private Sentence sentence;
+	
+	public MapperMethod(Method method, Method proxyMethod, Sentence sentence) {
+		this.method = method;
+		this.proxyMethod = proxyMethod;
+		this.sentence = sentence;
+	}
 
 	public Method getMethod() {
 		return method;
@@ -22,19 +28,20 @@ public class MapperMethod {
 		this.method = method;
 	}
 
-	public String getSource() {
-		return source;
+	public Sentence getSentence() {
+		return sentence;
 	}
 
-	public void setSource(String source) {
-		this.source = source;
+	public void setSentence(Sentence sentence) {
+		this.sentence = sentence;
 	}
 
-	public Object[] getParams() {
-		return params;
+	public Method getProxyMethod() {
+		return proxyMethod;
 	}
 
-	public void setParams(Object[] params) {
-		this.params = params;
+	public void setProxyMethod(Method proxyMethod) {
+		this.proxyMethod = proxyMethod;
 	}
+	
 }
