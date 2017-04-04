@@ -6,14 +6,16 @@ package com.fineShop.search.mapper;
 * 
 */
 public enum CommandType {
-	select("select"),
-    update("update"),
-    insert("insert"),
-    delete("selete");
+	select(0, "select"),
+    update(1, "update"),
+    insert(2, "insert"),
+    delete(3, "delete");
 	
+	private Integer key;
 	private String value;
 	
-	CommandType(String value){
+	CommandType(Integer key, String value){
+		this.key = key;
 		this.value = value;
 	}
 	
@@ -45,4 +47,13 @@ public enum CommandType {
 	public void setValue(String value) {
 		this.value = value;
 	}
+
+	public Integer getKey() {
+		return key;
+	}
+
+	public void setKey(Integer key) {
+		this.key = key;
+	}
+	
 }

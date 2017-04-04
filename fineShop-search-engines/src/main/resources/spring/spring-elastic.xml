@@ -8,23 +8,15 @@
         http://www.pilato.fr/schema/elasticsearch http://www.pilato.fr/schema/elasticsearch/elasticsearch-0.3.xsd  
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
-	<!-- <util:map id="esproperties">
+	<util:map id="esproperties">
 		<entry key="cluster.name" value="elasticsearch" />
 	</util:map>
 
 	<elasticsearch:client id="client" properties="esproperties"
 		esNodes="192.168.68.129:9300" />
-
-	<bean id="elasticsearchTemplate"
-		class="org.springframework.data.elasticsearch.core.ElasticsearchTemplate">
-		<constructor-arg name="client" ref="client" />
-	</bean>
 	
-	<bean id="jsonSession" class="com.fineShop.search.session.JsonSessionManager">
+	<!-- <bean id="jsonSession" class="com.fineShop.search.session.JsonSessionManager">
 		<property name="client" ref="client"/>
-	</bean> -->
-	
-	<bean id="jsonSession" class="com.fineShop.search.session.JsonSessionManager">
 	</bean>
 	
 	<bean id="registProxyManager" class="com.fineShop.search.spring.RegistProxyManager">
@@ -35,6 +27,6 @@
 		<property name="packagePath" value="com.fineShop.entity"/>
 		<property name="registProxyManager" ref="registProxyManager"/>
 		<property name="mapperLocations" value="classpath*:/search/*.xml"/>
-	</bean>
+	</bean> -->
 	
 </beans>

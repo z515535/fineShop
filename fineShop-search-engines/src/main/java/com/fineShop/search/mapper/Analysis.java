@@ -7,6 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.elasticsearch.index.mapper.MapperException;
+
+import com.fineShop.search.session.JsonSession;
+
 /**
 * @author 作者 wugf:
 * @version 创建时间：2017年3月31日 下午9:11:21<p>
@@ -18,24 +22,10 @@ public class Analysis {
 	private Analysis(){}
 	
 	/**
-	 * 根据被代理方法获取其配置信息
-	 * @return
-	 */
-	public static Sentence getSentenceByMethod(Method method, XmlConfigure xmlConfigure){
-		String methodName = method.getName();
-		for (Sentence sentence : xmlConfigure.getSentences()) {
-			if (methodName.equals(sentence.getMethodName())) {
-				return sentence;
-			}
-		}
-		return null;
-	}
-	
-	/**
 	 * 根据class解析其方法信息
 	 * @return
 	 */
-	public static List<MethodInfo> getMethodInfoByClass(Class<?> clazz){
+	private static List<MethodInfo> getMethodInfoByClass(Class<?> clazz){
 		Method[] methods = clazz.getMethods();
 		List<MethodInfo> methodInfos = null;
 		
@@ -72,22 +62,66 @@ public class Analysis {
 	}
 	
 	/**
-	 * 根据代理接口获取代理对象方法映射关系
+	 * 获取代理接口和被代理接口的映射
+	 * @param mapperInterface
+	 * 					被代理接口
+	 * @param proxyInterface
+	 * 					代理接口
+	 * @param xmlConfigure
+	 * 					mapping xml
 	 * @return
 	 */
-	public Map<Method, MapperMethod>  getMapperMethod(List<MethodInfo> interfaceMethodInfos,
-			List<MethodInfo> proxyMethodInfos, Map<Method, Sentence> sentenceCache){
+	public static Map<Method, MapperMethod> getMethodCache(Class<?> mapperInterface, XmlConfigure xmlConfigure){
+		
+		List<MethodInfo> mapperMethodInfos = getMethodInfoByClass(mapperInterface);
+		List<MethodInfo> proxyMethodInfos = getMethodInfoByClass(JsonSession.class);
 		
 		Map<Method, MapperMethod> methodCache = new ConcurrentHashMap<Method, MapperMethod>();
 		
-		for (MethodInfo methodInfo : interfaceMethodInfos) {
-			for (MethodInfo proxyMethodInfo : proxyMethodInfos) {
+		for (MethodInfo methodInfo : mapperMethodInfos) {
+			String key = methodInfo.getMethod().getName();
+			Sentence sentence = xmlConfigure.getSentences().get(key);
+			Integer actionType = sentence.getActionType();
+			MapperMethod mapperMethod = null;
+			
+			mapperMethod = getProxyMetnod(actionType, xmlConfigure, methodInfo, proxyMethodInfos);
+			methodCache.put(methodInfo.getMethod(), mapperMethod);
+		}
+		return methodCache;
+	}
+	
+	/**
+	 * 据被代理方法信息获取代理对象对应的方法
+	 * @param actionType
+	 * 				执行类型
+	 * @param xmlConfigure
+	 * 				xml配置文件
+	 * @param methodInfo
+	 * 				被代理方法信息
+	 * @param proxyMethodInfos
+	 * 				代理接口方法集合
+	 * @return
+	 */
+	private static MapperMethod getProxyMetnod(Integer actionType,XmlConfigure xmlConfigure, 
+						 MethodInfo methodInfo,List<MethodInfo> proxyMethodInfos) {
+		
+		String key = methodInfo.getMethod().getName();
+		Sentence sentence = xmlConfigure.getSentences().get(key);
+		
+		for (MethodInfo proxyMethodInfo : proxyMethodInfos) {
+			
+			// 判断执行类型
+			if (proxyMethodInfo.getMethod().getName().startsWith(CommandType.formatString(actionType))) {
 				if (methodInfo.equals(proxyMethodInfo)) {
-					MapperMethod mapperMethod = new MapperMethod(methodInfo.getMethod(), proxyMethodInfo.getMethod(), sentenceCache.get(methodInfo));
-					methodCache.put(methodInfo.getMethod(), mapperMethod);
+					if (sentence == null) {
+						throw new MapperException(String.format("命名空间为%s的配置文件配置异常",xmlConfigure.getNamespace()));
+					}
+					MapperMethod mapperMethod = new MapperMethod(proxyMethodInfo.getMethod(), xmlConfigure.getSentences().get(key));
+					return mapperMethod;
 				}
 			}
 		}
-		return methodCache;
+		
+		throw new MapperException(String.format("命名空间为%s的配置文件配置异常",xmlConfigure.getNamespace()));
 	}
 }

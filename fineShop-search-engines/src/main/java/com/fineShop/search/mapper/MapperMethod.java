@@ -10,22 +10,12 @@ import java.lang.reflect.Method;
  * 
  */
 public class MapperMethod {
-	private Method method;
 	private Method proxyMethod;
 	private Sentence sentence;
 	
-	public MapperMethod(Method method, Method proxyMethod, Sentence sentence) {
-		this.method = method;
+	public MapperMethod(Method proxyMethod, Sentence sentence) {
 		this.proxyMethod = proxyMethod;
 		this.sentence = sentence;
-	}
-
-	public Method getMethod() {
-		return method;
-	}
-
-	public void setMethod(Method method) {
-		this.method = method;
 	}
 
 	public Sentence getSentence() {

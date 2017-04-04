@@ -1,6 +1,6 @@
 package com.fineShop.search.mapper;
 
-import java.util.Set;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -14,7 +14,7 @@ public class XmlConfigure {
 	private String namespace;
 	private String index;
 	private String type;
-	private Set<Sentence> Sentences;
+	private Map<String, Sentence> Sentences;
 	
 	public String getNamespace() {
 		return namespace;
@@ -38,10 +38,10 @@ public class XmlConfigure {
 	public void setType(String type) {
 		this.type = type;
 	}
-	public Set<Sentence> getSentences() {
+	public Map<String, Sentence> getSentences() {
 		return Sentences;
 	}
-	public void setSentences(Set<Sentence> sentences) {
+	public void setSentences(Map<String, Sentence> sentences) {
 		Sentences = sentences;
 	}
 }

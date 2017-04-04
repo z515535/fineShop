@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.elasticsearch.index.mapper.MapperException;
 
 
 /**
@@ -88,12 +89,31 @@ public class MethodInfo {
 			return false;
 		
 		MethodInfo other = (MethodInfo) obj;
-		if (CollectionUtils.isEqualCollection(this.parameterTypes, other.getParameterTypes()) &&
-				this.parameterIsNull == other.getParameterIsNull() &&
-				this.returnType == other.getReturnType() &&
-				this.isVoid == other.getIsVoid()) {
-			return true;
+		
+		try {
+			List<Class<?>> thisParameterTypes = null;
+			List<Class<?>> otherParameterTypes = null;
+			if (this.parameterTypes.size() > other.getParameterTypes().size()) {
+				thisParameterTypes = this.parameterTypes.subList(1, this.parameterTypes.size());
+				otherParameterTypes = other.getParameterTypes();
+			} else if (this.parameterTypes.size() < other.getParameterTypes().size()) {
+				thisParameterTypes = this.parameterTypes;
+				otherParameterTypes =  other.getParameterTypes().subList(1, other.getParameterTypes().size());
+			} else {
+				thisParameterTypes = this.parameterTypes;
+				otherParameterTypes = other.getParameterTypes();
+			}
+			
+			if (CollectionUtils.isEqualCollection(thisParameterTypes, otherParameterTypes) &&
+					this.parameterIsNull == other.getParameterIsNull() &&
+					this.returnType == other.getReturnType() &&
+					this.isVoid == other.getIsVoid()) {
+				return true;
+			}
+		} catch(Exception e) {
+			throw new MapperException("被代理接口的参数或返回值异常!");
 		}
+		
 		return false;
 	}
 	

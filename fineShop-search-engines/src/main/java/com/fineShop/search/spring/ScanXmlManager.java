@@ -3,10 +3,13 @@ package com.fineShop.search.spring;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
@@ -52,17 +55,28 @@ public class ScanXmlManager implements ScanXmlAdapter{
 				xmlConfigure.setType(root.getAttributeValue(Constant.TYPE));
 				
 				List<Element> elementList = root.getChildren();
-				Set<Sentence> sentenceSet = new LinkedHashSet<Sentence>(elementList.size());
+				Map<String, Sentence> sentenceMap = new HashMap<String, Sentence>(elementList.size());
 				for (Element element : elementList) {
 					sentence = new Sentence();
 					sentence.setActionType(CommandType.formatIndex(element.getName()));
 					sentence.setMethodName(element.getAttributeValue(Constant.ID));
-					sentence.setIndex(element.getAttributeValue(Constant.INDEX));
-					sentence.setType(element.getAttributeValue(Constant.TYPE));
+					
+					if (StringUtils.isEmpty(element.getAttributeValue(Constant.INDEX))) {
+						sentence.setIndex(xmlConfigure.getIndex());
+					} else {
+						sentence.setIndex(element.getAttributeValue(Constant.INDEX));
+					}
+					
+					if (StringUtils.isEmpty(element.getAttributeValue(Constant.INDEX))) {
+						sentence.setType(xmlConfigure.getType());
+					} else {
+						sentence.setType(element.getAttributeValue(Constant.TYPE));
+					}
+					
 					sentence.setResource(element.getValue());
-					sentenceSet.add(sentence);
+					sentenceMap.put(sentence.getMethodName(), sentence);
 				}
-				xmlConfigure.setSentences(sentenceSet);
+				xmlConfigure.setSentences(sentenceMap);
 				xmlConfigureSet.add(xmlConfigure);
 			} catch (Exception e) {
 				System.err.println("解析xml 映射文件失败");

@@ -1,5 +1,10 @@
 package com.fineShop.test;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
 import org.elasticsearch.common.inject.Inject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,11 +24,13 @@ import com.fineShop.entity.UserDao;
 @ContextConfiguration("classpath*:/spring/spring-*.xml")
 public class BaseTest {
 
-	@Inject
-	private UserDao UserDao;
+	@Resource
+	private UserDao userDao;
 	
 	@Test
 	public void test(){
-		
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("password", "test");
+		System.out.println(userDao.getName( params));
 	}
 }
